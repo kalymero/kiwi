@@ -100,6 +100,10 @@ void main() {
       container.registerFactory<Character>(
           (c) => const Sith('Anakin', 'Skywalker', 'DarthVader'),
           name: 'named');
+      container.registerAssistedFactory<Sith>((c) {
+        return (Map<String, dynamic> args) =>
+            Sith('Sheev', 'Palpatine', args['id']);
+      });
 
       expect(container.resolve<int>(), 5);
       expect(container.resolve<Sith>(),
@@ -108,6 +112,13 @@ void main() {
           const Character('Anakin', 'Skywalker'));
       expect(container.resolve<Character>('named'),
           const Sith('Anakin', 'Skywalker', 'DarthVader'));
+
+      final Sith sith =
+          container.resolve<Sith Function(Map<String, dynamic>)>()(
+              {"id": "DarthSidious"});
+      expect(sith.id, equals('DarthSidious'));
+      expect(sith.firstName, equals('Sheev'));
+      expect(sith.lastName, equals('Palpatine'));
     });
 
     test('builders should always be created', () {

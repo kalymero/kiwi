@@ -114,6 +114,21 @@ class KiwiContainer {
     _setProvider(name, _Provider<S>.factory(factory));
   }
 
+  /// Registers a factory with assistend injection into the container.
+  ///
+  /// A factory returning Function that returns an object of type [S] can be registered.
+  ///
+  /// If [name] is set, the factory will be registered under this name.
+  /// To retrieve the same factory, the same name should be provided
+  /// to [KiwiContainer.resolve].
+  void registerAssistedFactory<S>(
+    FactoryBuilder<S Function(Map<String, dynamic>)> factory, {
+    String? name,
+  }) {
+    _setProvider(
+        name, _Provider<S Function(Map<String, dynamic>)>.factory(factory));
+  }
+
   /// Registers a factory that will be called only only when
   /// accessing it for the first time, into the container.
   ///
